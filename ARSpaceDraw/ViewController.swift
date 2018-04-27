@@ -16,11 +16,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var gestureNode:SCNNode!
     
-    var lastPoint = CGPoint.zeroPoint
+    var lastPoint = CGPoint.zero
+    
+    var currentTransform:matrix_float4x4!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        sceneView.debugOptions.insert(.showWireframe)
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -34,7 +37,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
-        addTapGestureToSceneView()
+        //addTapGestureToSceneView()
+        
+        sceneView.session.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +51,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Run the view's session
         sceneView.session.run(configuration)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -62,8 +68,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     
     func addTapGestureToSceneView() {
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addShipToSceneView(withGestureRecognizer:)))
-//        sceneView.addGestureRecognizer(tapGestureRecognizer)
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.addShipToSceneView(withGestureRecognizer:)))
+        sceneView.addGestureRecognizer(tapGestureRecognizer)
         
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.swipeHandler(_:)))
         sceneView.addGestureRecognizer(swipeGesture)
@@ -94,19 +100,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         print("Swipe handler")
         let tapLocation = gestureRecognizer.location(in: sceneView)
         let hitTestResults = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
-        
+
         guard let hitTestResult = hitTestResults.first else {
             print("No hit test results")
             return
         }
         let transform = hitTestResult.worldTransform
         let position = SCNVector3.init(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
-        
+
         print("Gesture recongizer state: \(gestureRecognizer.state.rawValue)")
-//        if gestureRecognizer.state == .recognized{
-//            print("recognized gesture state")
-//        }
-//        else
         if gestureRecognizer.state == .began {
             let node = createSphere()
             node.position = position
@@ -123,28 +125,62 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: touches
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
         guard let touch = touches.first else {
+            print("No touches")
             return
         }
+        let hitResults = sceneView.hitTest(touch.location(in: sceneView), types: [ARHitTestResult.ResultType.featurePoint])
+        
+        guard let hitResult = hitResults.first else {
+            print("No hit results")
+            return
+        }
+        print("Touches began")
+        
+        let transformCols = hitResult.worldTransform.columns
         // Keep track of where the user started (aka when finger hits the "canvas")
-        let lastPoint = touch.location(in: self.view)
+        //let lastPoint = touch.location(in: self.view)
+        //print(lastPoint)
+        let node = createSphere()
+        node.position = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
+        print(node.position)
+        self.gestureNode = node
+        sceneView.scene.rootNode.addChildNode(node)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else{
+        guard let touch = touches.first, self.gestureNode != nil else{
+            print("No touches or no gesture node")
             return
             
         }
-        let currentPoint = touch.location(in: view)
-        //drawLineFrom(lastPoint, toPoint: currentPoint)
+
+        let hitResults = sceneView.hitTest(touch.location(in: sceneView), types: [ARHitTestResult.ResultType.featurePoint])
         
+        guard let hitResult = hitResults.first else {
+            print("No hit results")
+            return
+        }
+        
+        print("Touches moved")
+        
+        let transformCols = hitResult.worldTransform.columns
+        
+        let currentPoint = touch.location(in: view)
+//        print(currentPoint)
+        let newPosition = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
+        let action = SCNAction.move(to: newPosition, duration: 0.5)
+        self.gestureNode.runAction(action)
+        
+        print(self.gestureNode.position)
         lastPoint = currentPoint
         
     }
     
     
     func createSphere()->SCNNode{
-        let sphere = SCNSphere(radius: 0.05)
+        let sphere = SCNSphere(radius: 0.1)
         //sphere.firstMaterial?.fillMode = .lines
         let node = SCNNode(geometry: sphere)
         return node
@@ -199,5 +235,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
+    }
+}
+
+extension ViewController: ARSessionDelegate{
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        self.currentTransform = frame.camera.transform
     }
 }
