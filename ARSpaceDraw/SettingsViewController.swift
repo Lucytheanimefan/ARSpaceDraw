@@ -11,6 +11,8 @@ import UIKit
 class SettingsViewController: UIViewController {
     @IBOutlet weak var colorPicker: ColorPicker!
     
+    @IBOutlet weak var colorView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         colorPicker.delegate = self
@@ -39,7 +41,8 @@ class SettingsViewController: UIViewController {
 
 extension SettingsViewController: ColorDelegate{
     func pickedColor(color: UIColor) {
-        print(color)
-        colorPicker.backgroundColor = color
+        DrawSettings.shared.color = color
+        colorView.backgroundColor = color
+        //colorPicker.backgroundColor = color
     }
 }

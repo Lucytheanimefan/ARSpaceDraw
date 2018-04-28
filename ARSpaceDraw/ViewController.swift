@@ -16,6 +16,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var gestureNode:SCNNode!
     
+    var spriteNode:SKShapeNode!
+    
+    var spritePath = CGMutablePath()
+    
+    var spriteAnchor:ARAnchor!
+    
     var lastPoint = CGPoint.zero
     
     var currentTransform:matrix_float4x4!
@@ -40,6 +46,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.scene = scene
         
         sceneView.session.delegate = self
+        
+        let spriteScene = SKScene(size: self.view.bounds.size)
+        spriteScene.isUserInteractionEnabled = false
+        spriteScene.delegate = self
+        sceneView.overlaySKScene = spriteScene
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +61,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = [.horizontal, .vertical]
         
+        var translation = matrix_identity_float4x4
+        translation.columns.3.z = -0.3
+        if let transform = sceneView.session.currentFrame?.camera.transform{
+            let anchorTransform = transform * translation
+            spriteAnchor = ARAnchor(transform: anchorTransform)
+            sceneView.session.add(anchor: spriteAnchor)
+        }
         // Run the view's session
         sceneView.session.run(configuration)
         
@@ -83,24 +102,47 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Keep track of where the user started (aka when finger hits the "canvas")
         //let lastPoint = touch.location(in: self.view)
         //print(lastPoint)
-        let node = NodeManipulator.createSphere()
-        node.position = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
-        //print(node.position)
-        self.gestureNode = node
-        sceneView.scene.rootNode.addChildNode(node)
+        
+        
+        if (DrawSettings.shared.drawItem == DrawItem.shape)
+        {
+            let node = NodeManipulator.createSphere()
+            node.position = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
+            self.gestureNode = node
+            sceneView.scene.rootNode.addChildNode(node)
+        }
+        else if (DrawSettings.shared.drawItem == DrawItem.line)
+        {
+            self.spriteNode = NodeManipulator.createLine(path: self.spritePath, newPoint: CGPoint.init(x: CGFloat(transformCols.3.x), y: CGFloat(transformCols.3.y)))
+            self.spriteNode.zPosition = CGFloat(transformCols.3.z)
+            //sceneView.overlaySKScene?.addChild(self.spriteNode)
+        }
+        
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("Touches moved")
         
-        guard let transformCols = touchesToTransform(touches: touches), self.gestureNode != nil else {
-            return
+        guard let transformCols = touchesToTransform(touches: touches) else {return}
+        
+        if (DrawSettings.shared.drawItem == DrawItem.shape){
+            guard self.gestureNode != nil else {
+                return
+            }
+            let newPosition = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
+            let action = SCNAction.move(to: newPosition, duration: 0.5)
+            self.gestureNode.runAction(action)
         }
-
-        let newPosition = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
-        let action = SCNAction.move(to: newPosition, duration: 0.5)
-        self.gestureNode.runAction(action)
-
+        else if (DrawSettings.shared.drawItem == DrawItem.line)
+        {
+            guard let firstTouch = touches.first, self.spriteNode != nil else {
+                return
+            }
+            self.spritePath.addLine(to: firstTouch.location(in: self.view))
+            self.spriteNode.path = self.spritePath
+            self.spriteNode.zPosition = CGFloat(transformCols.3.z)
+        }
+        
         
     }
     
@@ -179,6 +221,12 @@ extension ViewController: ARSessionDelegate{
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         self.currentTransform = frame.camera.transform
     }
+}
+
+extension ViewController: SKSceneDelegate{
+//    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+//        return nil
+//    }
 }
 
 extension SCNGeometry{

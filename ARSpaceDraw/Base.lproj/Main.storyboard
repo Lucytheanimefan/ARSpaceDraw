@@ -74,17 +74,23 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TKT-Ux-1vE">
+                                <rect key="frame" x="67" y="530" width="240" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="kRR-L9-z6y"/>
                     </view>
                     <connections>
                         <outlet property="colorPicker" destination="0EJ-NJ-F74" id="7cS-rh-tns"/>
+                        <outlet property="colorView" destination="TKT-Ux-1vE" id="zlU-Ga-7UE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rTy-IV-9sd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1878" y="212"/>
+            <point key="canvasLocation" x="1877.5999999999999" y="211.84407796101951"/>
         </scene>
     </scenes>
 </document>
