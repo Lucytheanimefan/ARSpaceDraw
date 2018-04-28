@@ -20,6 +20,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var currentTransform:matrix_float4x4!
     
+    var nodes:[SCNNode]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,6 +66,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Release any cached data, images, etc that aren't in use.
     }
     
+    // MARK: IBActions
+    @IBAction func edit(_ sender: UIBarButtonItem) {
+        self.performSegue(withIdentifier: "toSettings", sender: self)
+    }
+    
     
     // MARK: touches
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -76,7 +83,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Keep track of where the user started (aka when finger hits the "canvas")
         //let lastPoint = touch.location(in: self.view)
         //print(lastPoint)
-        let node = createSphere()
+        let node = NodeManipulator.createSphere()
         node.position = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
         //print(node.position)
         self.gestureNode = node
@@ -90,7 +97,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             return
         }
 
-//        print(currentPoint)
         let newPosition = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
         let action = SCNAction.move(to: newPosition, duration: 0.5)
         self.gestureNode.runAction(action)
@@ -115,13 +121,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         print("Touches moved")
         
         return hitResult.worldTransform.columns
-    }
-    
-    func createSphere()->SCNNode{
-        let sphere = SCNSphere(radius: 0.05)
-        sphere.setDiffuse(diffuse: UIColor(red: 0, green: 0, blue: 0, alpha: 1))
-        let node = SCNNode(geometry: sphere)
-        return node
     }
 
 

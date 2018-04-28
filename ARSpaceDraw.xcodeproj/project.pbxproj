@@ -14,6 +14,9 @@
 		7C9D0F632093D0000009F053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C9D0F622093D0000009F053 /* Assets.xcassets */; };
 		7C9D0F662093D0000009F053 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C9D0F642093D0000009F053 /* LaunchScreen.storyboard */; };
 		7C9D0F712093D0010009F053 /* ARSpaceDrawTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9D0F702093D0010009F053 /* ARSpaceDrawTests.swift */; };
+		7C9D0F7C2094709D0009F053 /* NodeManipulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9D0F7B2094709C0009F053 /* NodeManipulator.swift */; };
+		7C9D0F80209471D40009F053 /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9D0F7F209471D40009F053 /* ColorPicker.swift */; };
+		7C9D0F82209472DC0009F053 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9D0F81209472DC0009F053 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +41,9 @@
 		7C9D0F6C2093D0010009F053 /* ARSpaceDrawTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARSpaceDrawTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C9D0F702093D0010009F053 /* ARSpaceDrawTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARSpaceDrawTests.swift; sourceTree = "<group>"; };
 		7C9D0F722093D0010009F053 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7C9D0F7B2094709C0009F053 /* NodeManipulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeManipulator.swift; sourceTree = "<group>"; };
+		7C9D0F7F209471D40009F053 /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		7C9D0F81209472DC0009F053 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +92,9 @@
 				7C9D0F622093D0000009F053 /* Assets.xcassets */,
 				7C9D0F642093D0000009F053 /* LaunchScreen.storyboard */,
 				7C9D0F672093D0000009F053 /* Info.plist */,
+				7C9D0F7B2094709C0009F053 /* NodeManipulator.swift */,
+				7C9D0F7F209471D40009F053 /* ColorPicker.swift */,
+				7C9D0F81209472DC0009F053 /* SettingsViewController.swift */,
 			);
 			path = ARSpaceDraw;
 			sourceTree = "<group>";
@@ -201,7 +210,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C9D0F7C2094709D0009F053 /* NodeManipulator.swift in Sources */,
+				7C9D0F80209471D40009F053 /* ColorPicker.swift in Sources */,
 				7C9D0F5E2093CFFE0009F053 /* ViewController.swift in Sources */,
+				7C9D0F82209472DC0009F053 /* SettingsViewController.swift in Sources */,
 				7C9D0F5A2093CFFE0009F053 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
