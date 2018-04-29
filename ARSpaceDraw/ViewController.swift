@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
-
+    
     @IBOutlet var sceneView: ARSCNView!
     
     var gestureNode:SCNNode!
@@ -109,18 +109,26 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         //print(lastPoint)
         
         
-        if (DrawSettings.shared.drawItem == DrawItem.shape)
-        {
-            let node = NodeManipulator.createSphere()
-            node.position = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
-            self.gestureNode = node
-            sceneView.scene.rootNode.addChildNode(node)
-        }
-        else if (DrawSettings.shared.drawItem == DrawItem.line)
+        if (DrawSettings.shared.drawItem == DrawItem.line)
         {
             self.spriteNode = NodeManipulator.createLine(path: self.spritePath, newPoint: CGPoint.init(x: CGFloat(transformCols.3.x), y: CGFloat(transformCols.3.y)))
             self.spriteNode.zPosition = CGFloat(transformCols.3.z)
             //sceneView.overlaySKScene?.addChild(self.spriteNode)
+        }
+        else{
+            var node:SCNNode!
+            if (DrawSettings.shared.drawItem == DrawItem.sphere)
+            {
+                node = NodeManipulator.createSphere()
+            }
+            else if (DrawSettings.shared.drawItem == .octahedron)
+            {
+                node = NodeManipulator.createOctahedron()
+            }
+            node.position = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
+            node.scale = SCNVector3Make(DrawSettings.shared.size, DrawSettings.shared.size, DrawSettings.shared.size)
+            self.gestureNode = node
+            sceneView.scene.rootNode.addChildNode(node)
         }
         
     }
@@ -130,15 +138,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         guard let transformCols = touchesToTransform(touches: touches) else {return}
         
-        if (DrawSettings.shared.drawItem == DrawItem.shape){
-            guard self.gestureNode != nil else {
-                return
-            }
-            let newPosition = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
-            let action = SCNAction.move(to: newPosition, duration: 0.5)
-            self.gestureNode.runAction(action)
-        }
-        else if (DrawSettings.shared.drawItem == DrawItem.line)
+        if (DrawSettings.shared.drawItem == DrawItem.line)
         {
             guard let firstTouch = touches.first, self.spriteNode != nil else {
                 return
@@ -146,6 +146,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             self.spritePath.addLine(to: firstTouch.location(in: self.view))
             self.spriteNode.path = self.spritePath
             self.spriteNode.zPosition = CGFloat(transformCols.3.z)
+        }
+        else
+        {
+            guard self.gestureNode != nil else {
+                return
+            }
+            let newPosition = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
+            let action = SCNAction.move(to: newPosition, duration: 0.5)
+            self.gestureNode.runAction(action)
         }
         
         
@@ -169,18 +178,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         return hitResult.worldTransform.columns
     }
-
-
+    
+    
     // MARK: - ARSCNViewDelegate
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
+    /*
+     // Override to create and configure nodes for anchors added to the view's session.
+     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+     let node = SCNNode()
      
-        return node
-    }
-*/
+     return node
+     }
+     */
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         
@@ -229,9 +238,9 @@ extension ViewController: ARSessionDelegate{
 }
 
 extension ViewController: SKSceneDelegate{
-//    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-//        return nil
-//    }
+    //    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+    //        return nil
+    //    }
 }
 
 

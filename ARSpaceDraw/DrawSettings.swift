@@ -8,8 +8,17 @@
 
 import UIKit
 
-enum DrawItem {
-    case line, shape
+enum DrawItem:String {
+    case line = "line"
+    case sphere = "sphere"
+    case octahedron = "octahedron"
+    
+    static let all = [line, sphere, octahedron]
+    static var count: Int { return DrawItem.octahedron.hashValue + 1}
+}
+
+protocol DrawSettingsDelegate{
+    func onDrawItemChange(item:DrawItem)
 }
 
 class DrawSettings: NSObject {
@@ -18,7 +27,18 @@ class DrawSettings: NSObject {
     
     var color:UIColor! = .black
     
-    var drawItem:DrawItem! = .shape
+    var delegate:DrawSettingsDelegate?
+    
+    private var _drawItem:DrawItem = .sphere
+    var drawItem:DrawItem{
+        get{
+            return self._drawItem
+        }
+        set{
+            self._drawItem = newValue
+            self.delegate?.onDrawItemChange(item:self._drawItem)
+        }
+    }
     
     var size:Float = 1
     

@@ -37,14 +37,16 @@ class NodeManipulator: NSObject {
         let source = SCNGeometrySource(vertices: NodeManipulator.octahedronVertices)
         let element = SCNGeometryElement(indices: NodeManipulator.octahedronIndices, primitiveType: .triangles)
         let geometry = SCNGeometry(sources: [source], elements: [element])
-        return SCNNode(geometry: geometry)
+        let node = SCNNode(geometry: geometry)
+        //node.scale = SCNVector3Make(Float(DrawSettings.shared.size), Float(DrawSettings.shared.size), Float(DrawSettings.shared.size))
+        return node
     }
 
     static func createSphere()->SCNNode{
         let sphere = SCNSphere(radius: DrawSettings.sphereRadius)
         sphere.setDiffuse(diffuse: DrawSettings.shared.color)
         let node = SCNNode(geometry: sphere)
-        node.scale = SCNVector3Make(Float(DrawSettings.shared.size), Float(DrawSettings.shared.size), Float(DrawSettings.shared.size))
+        //node.scale = SCNVector3Make(Float(DrawSettings.shared.size), Float(DrawSettings.shared.size), Float(DrawSettings.shared.size))
         return node
     }
     

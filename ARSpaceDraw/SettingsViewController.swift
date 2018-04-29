@@ -9,11 +9,23 @@
 import UIKit
 import SceneKit
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
     @IBOutlet weak var sceneView: SCNView!
     @IBOutlet weak var colorPicker: ColorPicker!
+    @IBOutlet weak var nodePicker: UIPickerView!
     
-    var previewNode:SCNNode!
+    private var _previewNode:SCNNode! = NodeManipulator.createSphere()
+    var previewNode:SCNNode{
+        get{
+            return self._previewNode
+        }
+        set{
+            self._previewNode.removeFromParentNode()
+            self._previewNode = newValue
+            sceneView.scene?.rootNode.addChildNode(previewNode)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +35,7 @@ class SettingsViewController: UIViewController {
         sceneView.scene = scene
         sceneView.debugOptions.insert(.showWireframe)
         
+        DrawSettings.shared.delegate = self
         // Gestures
         //addGestureRecognizer()
         
@@ -35,8 +48,8 @@ class SettingsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.previewNode = NodeManipulator.createSphere()
-        sceneView.scene?.rootNode.addChildNode(previewNode)
+        //self.previewNode = NodeManipulator.createSphere()
+        
     }
     
     @IBAction func done(_ sender: UIBarButtonItem) {
@@ -44,31 +57,30 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func sizeSlider(_ sender: UISlider) {
-        //guard let sphere = self.previewNode.geometry as? SCNSphere else {return}
-//        sphere.radius = CGFloat(sender.value)
-//        DrawSettings.shared.size = sphere.radius
         let scale = sender.value
-        //print(scale)
         self.previewNode.scale = SCNVector3Make(scale, scale, scale)
-        DrawSettings.shared.size = scale 
+        DrawSettings.shared.size = scale
 
     }
-    // MARK: Gestures
     
-//    func addGestureRecognizer(){
-//        let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(gesture:)))
-//        self.view.addGestureRecognizer(zoomGesture)
-//    }
-//
-//    @objc func handlePinchGesture(gesture:UIPinchGestureRecognizer){
-//        guard let sphere = self.previewNode.geometry as? SCNSphere else {return}
-//
-//        let action = SCNAction.scale(by: gesture.scale.squareRoot(), duration: 0.5)
-//        self.previewNode.runAction(action) {
-//            DrawSettings.shared.size = sphere.radius
-//        }
-//    }
-//
+    // MARK: PickerView
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return DrawItem.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return DrawItem.all[row].rawValue
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        DrawSettings.shared.drawItem = DrawItem.all[row]
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -84,10 +96,24 @@ class SettingsViewController: UIViewController {
 extension SettingsViewController: ColorDelegate{
     func pickedColor(color: UIColor) {
         DrawSettings.shared.color = color
-        
         self.previewNode.geometry?.setDiffuse(diffuse: color)
-        
-        //colorView.backgroundColor = color
-        //colorPicker.backgroundColor = color
     }
 }
+
+extension SettingsViewController: DrawSettingsDelegate{
+    func onDrawItemChange(item:DrawItem) {
+        if (item == .line){
+            
+        }
+        else if (item == .octahedron){
+            self.previewNode = NodeManipulator.createOctahedron()
+            print(self.previewNode)
+        }
+        else if (item == .sphere){
+            self.previewNode = NodeManipulator.createSphere()
+        }
+        
+    }
+}
+
+
