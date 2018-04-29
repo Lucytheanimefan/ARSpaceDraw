@@ -57,6 +57,12 @@ class NodeManipulator: NSObject {
         node.lineWidth = 30
         return node
     }
+    
+    static func withinBounds(position1:SCNVector3, position2:SCNVector3) -> Bool{
+        return (abs(position1.x - position2.x) < DrawSettings.bounds &&
+            abs(position1.y - position2.y) < DrawSettings.bounds &&
+            abs(position1.z - position2.z) < DrawSettings.bounds)
+    }
 }
 
 extension SCNGeometry{

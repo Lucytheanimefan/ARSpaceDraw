@@ -26,7 +26,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var currentTransform:matrix_float4x4!
     
-    var nodes:[SCNNode]!
+    var nodes = [SCNNode]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,6 +129,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             node.scale = SCNVector3Make(DrawSettings.shared.size, DrawSettings.shared.size, DrawSettings.shared.size)
             self.gestureNode = node
             sceneView.scene.rootNode.addChildNode(node)
+            nodes.append(node)
         }
         
     }
@@ -191,28 +192,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
      }
      */
     
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+//        nodes.forEach { (node) in
+//            print("\(node.position.y),\(self.currentTransform.position().y)")
+//            if (node.position.y*2 < self.currentTransform.position().y){
+//                print("REMOVE")
+//                node.removeFromParentNode()
+//            }
+//        }
+    }
+    
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        // 1
-        guard let planeAnchor = anchor as?  ARPlaneAnchor,
-            let planeNode = node.childNodes.first,
-            let plane = planeNode.geometry as? SCNPlane
-            else { return }
         
-        // 2
-        let width = CGFloat(planeAnchor.extent.x)
-        let height = CGFloat(planeAnchor.extent.z)
-        plane.width = width
-        plane.height = height
-        
-        // 3
-        let x = CGFloat(planeAnchor.center.x)
-        let y = CGFloat(planeAnchor.center.y)
-        let z = CGFloat(planeAnchor.center.z)
-        planeNode.position = SCNVector3(x, y, z)
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
@@ -234,6 +229,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 extension ViewController: ARSessionDelegate{
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         self.currentTransform = frame.camera.transform
+        
+        guard self.gestureNode != nil else {return}
+        
+        for (i, node) in nodes.enumerated(){
+            let currentPosition = self.currentTransform.position()
+            let nodePosition = node.position
+            
+            // Collision detection
+            if NodeManipulator.withinBounds(position1: nodePosition, position2: currentPosition){
+                print("--Within bounds!!!!")
+                
+                // Move the node out a bit if I collide with it
+                let action = SCNAction.fadeOut(duration: 2)
+                node.runAction(action, completionHandler: {
+                    node.removeFromParentNode()
+                    self.nodes.remove(at: i)
+                    print("Killed a NODE!")
+                })
+                node.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: nil)
+                
+            }
+        }
     }
 }
 
@@ -241,6 +258,12 @@ extension ViewController: SKSceneDelegate{
     //    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
     //        return nil
     //    }
+}
+
+extension matrix_float4x4 {
+    func position() -> SCNVector3 {
+        return SCNVector3(columns.3.x, columns.3.y, columns.3.z)
+    }
 }
 
 

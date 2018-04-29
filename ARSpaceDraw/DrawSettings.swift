@@ -43,5 +43,6 @@ class DrawSettings: NSObject {
     var size:Float = 1
     
     static let sphereRadius:CGFloat = 0.05
+    static let bounds:Float = 0.2
 
 }
