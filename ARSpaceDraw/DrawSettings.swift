@@ -18,6 +18,6 @@ class DrawSettings: NSObject {
     
     var color:UIColor! = .black
     
-    var drawItem:DrawItem! = .line
+    var drawItem:DrawItem! = .shape
 
 }

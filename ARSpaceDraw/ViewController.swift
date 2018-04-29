@@ -52,6 +52,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         spriteScene.delegate = self
         sceneView.overlaySKScene = spriteScene
         
+        
+        // Gestures
+        addGestureRecognizer()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,6 +94,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.performSegue(withIdentifier: "toSettings", sender: self)
     }
     
+    
+    // MARK: Gestures
+    
+    func addGestureRecognizer(){
+        let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(gesture:)))
+        self.view.addGestureRecognizer(zoomGesture)
+    }
+    @objc func handlePinchGesture(gesture:UIPinchGestureRecognizer){
+        guard let sphere = self.gestureNode.geometry as? SCNSphere else {return}
+        
+        sphere.radius *= gesture.scale
+    }
     
     // MARK: touches
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
