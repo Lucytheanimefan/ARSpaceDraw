@@ -13,7 +13,7 @@ import SpriteKit
 class NodeManipulator: NSObject {
 
     static func createSphere()->SCNNode{
-        let sphere = SCNSphere(radius: 0.05)
+        let sphere = SCNSphere(radius: DrawSettings.shared.size)
         sphere.setDiffuse(diffuse: DrawSettings.shared.color)
         let node = SCNNode(geometry: sphere)
         return node

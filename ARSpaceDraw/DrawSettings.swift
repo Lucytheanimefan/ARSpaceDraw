@@ -19,5 +19,7 @@ class DrawSettings: NSObject {
     var color:UIColor! = .black
     
     var drawItem:DrawItem! = .shape
+    
+    var size:CGFloat = 0.05
 
 }

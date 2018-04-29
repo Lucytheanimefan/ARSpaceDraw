@@ -79,6 +79,10 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5GE-SU-ebi">
+                                <rect key="frame" x="0.0" y="44" width="375" height="255"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </sceneKitView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="kRR-L9-z6y"/>
@@ -86,6 +90,7 @@
                     <connections>
                         <outlet property="colorPicker" destination="0EJ-NJ-F74" id="7cS-rh-tns"/>
                         <outlet property="colorView" destination="TKT-Ux-1vE" id="zlU-Ga-7UE"/>
+                        <outlet property="sceneView" destination="5GE-SU-ebi" id="wAN-J1-NaR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rTy-IV-9sd" userLabel="First Responder" sceneMemberID="firstResponder"/>
