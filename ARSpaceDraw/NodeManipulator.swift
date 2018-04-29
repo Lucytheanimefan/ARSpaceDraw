@@ -27,3 +27,9 @@ class NodeManipulator: NSObject {
         return node
     }
 }
+
+extension SCNGeometry{
+    func setDiffuse(diffuse:Any){
+        self.firstMaterial?.diffuse.contents = diffuse
+    }
+}

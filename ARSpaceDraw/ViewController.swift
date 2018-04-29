@@ -234,8 +234,4 @@ extension ViewController: SKSceneDelegate{
 //    }
 }
 
-extension SCNGeometry{
-    func setDiffuse(diffuse:Any){
-        self.firstMaterial?.diffuse.contents = diffuse
-    }
-}
+

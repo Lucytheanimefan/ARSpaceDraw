@@ -13,8 +13,6 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var sceneView: SCNView!
     @IBOutlet weak var colorPicker: ColorPicker!
     
-    @IBOutlet weak var colorView: UIView!
-    
     var previewNode:SCNNode!
     
     override func viewDidLoad() {
@@ -26,7 +24,7 @@ class SettingsViewController: UIViewController {
         sceneView.debugOptions.insert(.showWireframe)
         
         // Gestures
-        addGestureRecognizer()
+        //addGestureRecognizer()
         
     }
 
@@ -45,6 +43,12 @@ class SettingsViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func sizeSlider(_ sender: UISlider) {
+        guard let sphere = self.previewNode.geometry as? SCNSphere else {return}
+        
+        sphere.radius = CGFloat(sender.value)
+        DrawSettings.shared.size = sphere.radius
+    }
     // MARK: Gestures
     
     func addGestureRecognizer(){
@@ -60,6 +64,7 @@ class SettingsViewController: UIViewController {
             DrawSettings.shared.size = sphere.radius
         }
     }
+    
     /*
     // MARK: - Navigation
 
@@ -75,7 +80,10 @@ class SettingsViewController: UIViewController {
 extension SettingsViewController: ColorDelegate{
     func pickedColor(color: UIColor) {
         DrawSettings.shared.color = color
-        colorView.backgroundColor = color
+        
+        self.previewNode.geometry?.setDiffuse(diffuse: color)
+        
+        //colorView.backgroundColor = color
         //colorPicker.backgroundColor = color
     }
 }
