@@ -44,27 +44,31 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func sizeSlider(_ sender: UISlider) {
-        guard let sphere = self.previewNode.geometry as? SCNSphere else {return}
-        
-        sphere.radius = CGFloat(sender.value)
-        DrawSettings.shared.size = sphere.radius
+        //guard let sphere = self.previewNode.geometry as? SCNSphere else {return}
+//        sphere.radius = CGFloat(sender.value)
+//        DrawSettings.shared.size = sphere.radius
+        let scale = sender.value
+        //print(scale)
+        self.previewNode.scale = SCNVector3Make(scale, scale, scale)
+        DrawSettings.shared.size = scale 
+
     }
     // MARK: Gestures
     
-    func addGestureRecognizer(){
-        let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(gesture:)))
-        self.view.addGestureRecognizer(zoomGesture)
-    }
-    
-    @objc func handlePinchGesture(gesture:UIPinchGestureRecognizer){
-        guard let sphere = self.previewNode.geometry as? SCNSphere else {return}
-        
-        let action = SCNAction.scale(by: gesture.scale.squareRoot(), duration: 0.5)
-        self.previewNode.runAction(action) {
-            DrawSettings.shared.size = sphere.radius
-        }
-    }
-    
+//    func addGestureRecognizer(){
+//        let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(gesture:)))
+//        self.view.addGestureRecognizer(zoomGesture)
+//    }
+//
+//    @objc func handlePinchGesture(gesture:UIPinchGestureRecognizer){
+//        guard let sphere = self.previewNode.geometry as? SCNSphere else {return}
+//
+//        let action = SCNAction.scale(by: gesture.scale.squareRoot(), duration: 0.5)
+//        self.previewNode.runAction(action) {
+//            DrawSettings.shared.size = sphere.radius
+//        }
+//    }
+//
     /*
     // MARK: - Navigation
 

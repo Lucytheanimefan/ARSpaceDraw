@@ -20,6 +20,8 @@ class DrawSettings: NSObject {
     
     var drawItem:DrawItem! = .shape
     
-    var size:CGFloat = 0.05
+    var size:Float = 1
+    
+    static let sphereRadius:CGFloat = 0.05
 
 }
