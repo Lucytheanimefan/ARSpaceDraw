@@ -11,8 +11,9 @@ import SceneKit
 import SpriteKit
 
 class NodeManipulator: NSObject {
+    static let octahedronFactor:Float = 0.05
     
-    static var octahedronIndices: [Int] = [
+    static var octahedronIndices: [UInt16] = [
         0, 1, 2,
         2, 3, 0,
         3, 4, 0,
@@ -37,7 +38,9 @@ class NodeManipulator: NSObject {
         let source = SCNGeometrySource(vertices: NodeManipulator.octahedronVertices)
         let element = SCNGeometryElement(indices: NodeManipulator.octahedronIndices, primitiveType: .triangles)
         let geometry = SCNGeometry(sources: [source], elements: [element])
+        geometry.setDiffuse(diffuse: DrawSettings.shared.color)
         let node = SCNNode(geometry: geometry)
+        node.scale = SCNVector3Make(NodeManipulator.octahedronFactor, NodeManipulator.octahedronFactor, NodeManipulator.octahedronFactor)
         //node.scale = SCNVector3Make(Float(DrawSettings.shared.size), Float(DrawSettings.shared.size), Float(DrawSettings.shared.size))
         return node
     }

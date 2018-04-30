@@ -22,9 +22,9 @@ class ScoreNode: SKNode {
         
         highScore = defaults.integer(forKey: scoreKey)
         
-        scoreNode.text = "\(score)"
-        scoreNode.fontSize = 70
-        scoreNode.position = CGPoint(x: size.width / 2, y: size.height - 100)
+        scoreNode.text = "Score: \(score)"
+        scoreNode.fontSize = 40
+        scoreNode.position = CGPoint(x: size.width / 2, y: size.height - 50)
         scoreNode.zPosition = 1
         
         addChild(scoreNode)
@@ -74,6 +74,6 @@ class ScoreNode: SKNode {
     
     /// Updates the score label to show the current score.
     private func updateScoreboard() {
-        scoreNode.text = "\(score)"
+        scoreNode.text = "Score: \(score)"
     }
 }

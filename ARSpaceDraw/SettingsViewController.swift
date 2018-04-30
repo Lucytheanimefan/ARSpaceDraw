@@ -15,6 +15,8 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     @IBOutlet weak var colorPicker: ColorPicker!
     @IBOutlet weak var nodePicker: UIPickerView!
     
+    @IBOutlet weak var sizeSlider: UISlider!
+    
     private var _previewNode:SCNNode! = NodeManipulator.createSphere()
     var previewNode:SCNNode{
         get{
@@ -36,11 +38,9 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         sceneView.debugOptions.insert(.showWireframe)
         
         DrawSettings.shared.delegate = self
-        // Gestures
-        //addGestureRecognizer()
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -48,12 +48,15 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //self.previewNode = NodeManipulator.createSphere()
+        loadValues()
         
     }
     
-    @IBAction func done(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
+    func loadValues(){
+        self.sizeSlider.value = DrawSettings.shared.size
+        self.nodePicker.selectRow(DrawSettings.shared.drawItem.hashValue, inComponent: 0, animated: false)
+        setNode(item: DrawSettings.shared.drawItem)
+        self.previewNode.geometry?.setDiffuse(diffuse: DrawSettings.shared.color)
     }
     
     @IBAction func sizeSlider(_ sender: UISlider) {
@@ -90,6 +93,18 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func setNode(item:DrawItem){
+        if (item == .line){
+            
+        }
+        else if (item == .octahedron){
+            self.previewNode = NodeManipulator.createOctahedron()
+        }
+        else if (item == .sphere){
+            self.previewNode = NodeManipulator.createSphere()
+        }
+    }
 
 }
 
@@ -102,17 +117,7 @@ extension SettingsViewController: ColorDelegate{
 
 extension SettingsViewController: DrawSettingsDelegate{
     func onDrawItemChange(item:DrawItem) {
-        if (item == .line){
-            
-        }
-        else if (item == .octahedron){
-            self.previewNode = NodeManipulator.createOctahedron()
-            print(self.previewNode)
-        }
-        else if (item == .sphere){
-            self.previewNode = NodeManipulator.createSphere()
-        }
-        
+        setNode(item: item)
     }
 }
 

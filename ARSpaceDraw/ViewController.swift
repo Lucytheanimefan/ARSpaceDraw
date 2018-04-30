@@ -89,11 +89,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Release any cached data, images, etc that aren't in use.
     }
     
-    // MARK: IBActions
-    @IBAction func edit(_ sender: UIBarButtonItem) {
-        self.performSegue(withIdentifier: "toSettings", sender: self)
-    }
-    
     
     
     
@@ -121,13 +116,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             if (DrawSettings.shared.drawItem == DrawItem.sphere)
             {
                 node = NodeManipulator.createSphere()
+                node.scale = SCNVector3Make(DrawSettings.shared.size, DrawSettings.shared.size, DrawSettings.shared.size)
             }
             else if (DrawSettings.shared.drawItem == .octahedron)
             {
                 node = NodeManipulator.createOctahedron()
+                //let s = DrawSettings.shared.size * NodeManipulator.octahedronFactor
+                //node.scale = SCNVector3Make(s,s,s)
             }
             node.position = SCNVector3.init(transformCols.3.x, transformCols.3.y, transformCols.3.z)
-            node.scale = SCNVector3Make(DrawSettings.shared.size, DrawSettings.shared.size, DrawSettings.shared.size)
+            
             self.gestureNode = node
             sceneView.scene.rootNode.addChildNode(node)
             nodes.append(node)
