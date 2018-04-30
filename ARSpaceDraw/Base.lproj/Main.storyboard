@@ -44,7 +44,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Hrc-Mf-KdF"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="SIs-2c-Ysy"/>
+                    <tabBarItem key="tabBarItem" title="Item" selectedImage="tapandplay" id="SIs-2c-Ysy"/>
                     <connections>
                         <outlet property="sceneView" destination="COn-RL-DnP" id="XnN-gG-Ds6"/>
                     </connections>
@@ -116,7 +116,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kRR-L9-z6y"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="8op-Wd-G9t"/>
+                    <tabBarItem key="tabBarItem" title="Item" selectedImage="edit" id="8op-Wd-G9t"/>
                     <connections>
                         <outlet property="colorPicker" destination="0EJ-NJ-F74" id="7cS-rh-tns"/>
                         <outlet property="nodePicker" destination="Jp1-td-l2w" id="3ck-fC-5TB"/>
@@ -129,4 +129,8 @@
             <point key="canvasLocation" x="817" y="663"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="edit" width="24" height="24"/>
+        <image name="tapandplay" width="24" height="24"/>
+    </resources>
 </document>

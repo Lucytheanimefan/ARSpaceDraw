@@ -193,7 +193,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         
         print("Touches moved")
-        
         return hitResult.worldTransform.columns
     }
     
@@ -210,13 +209,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
      */
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-//        nodes.forEach { (node) in
-//            print("\(node.position.y),\(self.currentTransform.position().y)")
-//            if (node.position.y*2 < self.currentTransform.position().y){
-//                print("REMOVE")
-//                node.removeFromParentNode()
-//            }
-//        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
