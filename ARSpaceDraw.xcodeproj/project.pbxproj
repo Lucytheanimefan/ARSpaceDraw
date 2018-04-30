@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7C5A239B2094E6AA005B5FFB /* DrawSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5A239A2094E6AA005B5FFB /* DrawSettings.swift */; };
+		7C5A239D2096B192005B5FFB /* icon_notifications_checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 7C5A239C2096B192005B5FFB /* icon_notifications_checkmark.png */; };
+		7C5A239F2096B30B005B5FFB /* ScoreNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5A239E2096B30B005B5FFB /* ScoreNode.swift */; };
 		7C9D0F5A2093CFFE0009F053 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9D0F592093CFFE0009F053 /* AppDelegate.swift */; };
 		7C9D0F5C2093CFFE0009F053 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C9D0F5B2093CFFE0009F053 /* art.scnassets */; };
 		7C9D0F5E2093CFFE0009F053 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9D0F5D2093CFFE0009F053 /* ViewController.swift */; };
@@ -32,6 +34,8 @@
 
 /* Begin PBXFileReference section */
 		7C5A239A2094E6AA005B5FFB /* DrawSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawSettings.swift; sourceTree = "<group>"; };
+		7C5A239C2096B192005B5FFB /* icon_notifications_checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_notifications_checkmark.png; sourceTree = "<group>"; };
+		7C5A239E2096B30B005B5FFB /* ScoreNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreNode.swift; sourceTree = "<group>"; };
 		7C9D0F562093CFFE0009F053 /* ARSpaceDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARSpaceDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C9D0F592093CFFE0009F053 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C9D0F5B2093CFFE0009F053 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -95,9 +99,11 @@
 				7C9D0F642093D0000009F053 /* LaunchScreen.storyboard */,
 				7C9D0F672093D0000009F053 /* Info.plist */,
 				7C9D0F7B2094709C0009F053 /* NodeManipulator.swift */,
+				7C5A239C2096B192005B5FFB /* icon_notifications_checkmark.png */,
 				7C9D0F7F209471D40009F053 /* ColorPicker.swift */,
 				7C9D0F81209472DC0009F053 /* SettingsViewController.swift */,
 				7C5A239A2094E6AA005B5FFB /* DrawSettings.swift */,
+				7C5A239E2096B30B005B5FFB /* ScoreNode.swift */,
 			);
 			path = ARSpaceDraw;
 			sourceTree = "<group>";
@@ -196,6 +202,7 @@
 				7C9D0F662093D0000009F053 /* LaunchScreen.storyboard in Resources */,
 				7C9D0F632093D0000009F053 /* Assets.xcassets in Resources */,
 				7C9D0F612093CFFE0009F053 /* Main.storyboard in Resources */,
+				7C5A239D2096B192005B5FFB /* icon_notifications_checkmark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +226,7 @@
 				7C9D0F5E2093CFFE0009F053 /* ViewController.swift in Sources */,
 				7C9D0F82209472DC0009F053 /* SettingsViewController.swift in Sources */,
 				7C9D0F5A2093CFFE0009F053 /* AppDelegate.swift in Sources */,
+				7C5A239F2096B30B005B5FFB /* ScoreNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

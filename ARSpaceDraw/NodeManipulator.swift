@@ -63,6 +63,19 @@ class NodeManipulator: NSObject {
             abs(position1.y - position2.y) < DrawSettings.bounds &&
             abs(position1.z - position2.z) < DrawSettings.bounds)
     }
+    
+    
+    static func handleCollision(node:SCNNode, completion:@escaping ()->()){
+        // Move the node out a bit if I collide with it
+        let action = SCNAction.fadeOut(duration: 2)
+        node.runAction(action, completionHandler: {
+            node.removeFromParentNode()
+            print("Killed a NODE!")
+            completion()
+        })
+        node.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: nil)
+    }
+    
 }
 
 extension SCNGeometry{

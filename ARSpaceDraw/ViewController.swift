@@ -28,6 +28,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var nodes = [SCNNode]()
     
+    let scoreNode = ScoreNode()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,11 +51,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let spriteScene = SKScene(size: self.view.bounds.size)
         spriteScene.isUserInteractionEnabled = false
-        spriteScene.delegate = self
         sceneView.overlaySKScene = spriteScene
         
-        
-        
+        scoreNode.setup(size: spriteScene.size)
+        spriteScene.addChild(scoreNode)
         
     }
     
@@ -239,26 +240,16 @@ extension ViewController: ARSessionDelegate{
             // Collision detection
             if NodeManipulator.withinBounds(position1: nodePosition, position2: currentPosition){
                 print("--Within bounds!!!!")
-                
-                // Move the node out a bit if I collide with it
-                let action = SCNAction.fadeOut(duration: 2)
-                node.runAction(action, completionHandler: {
-                    node.removeFromParentNode()
+                NodeManipulator.handleCollision(node: node) {
+                    guard self.nodes.count > i else {return}
+                    self.scoreNode.addPoint()
                     self.nodes.remove(at: i)
-                    print("Killed a NODE!")
-                })
-                node.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: nil)
-                
+                }
             }
         }
     }
 }
 
-extension ViewController: SKSceneDelegate{
-    //    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-    //        return nil
-    //    }
-}
 
 extension matrix_float4x4 {
     func position() -> SCNVector3 {
