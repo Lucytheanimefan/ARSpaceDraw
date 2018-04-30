@@ -12,19 +12,19 @@ import SpriteKit
 class ScoreNode: SKNode {
     private let scoreKey = "ARSPACEDRAW_HIGHSCORE"
     private let scoreNode = SKLabelNode(fontNamed: "PixelDigivolve")
-    private(set) var score : Int = 0
-    private var highScore : Int = 0
+    private(set) var score : Float = 0
+    private var highScore : Float = 0
     private var showingHighScore = false
     
     /// Set up HUD here.
     public func setup(size: CGSize) {
         let defaults = UserDefaults.standard
         
-        highScore = defaults.integer(forKey: scoreKey)
+        highScore = defaults.float(forKey: scoreKey)
         
         scoreNode.text = "Score: \(score)"
         scoreNode.fontSize = 40
-        scoreNode.position = CGPoint(x: size.width / 2, y: size.height - 50)
+        scoreNode.position = CGPoint(x: size.width / 2, y: size.height - 60)
         scoreNode.zPosition = 1
         
         addChild(scoreNode)
@@ -34,7 +34,7 @@ class ScoreNode: SKNode {
     /// - Increments the score.
     /// - Saves to user defaults.
     /// - If a high score is achieved, then enlarge the scoreNode and update the color.
-    public func addPoint() {
+    @objc public func addPoint() {
         print("Add point: \(score)")
         score += 1
         
@@ -53,6 +53,27 @@ class ScoreNode: SKNode {
                 scoreNode.fontColor = SKColor(red:0.99, green:0.92, blue:0.55, alpha:1.0)
             }
         }
+    }
+    
+    @objc public func addPoints(points:Float) {
+        print("Add point: \(score)")
+        score += points
+        
+        updateScoreboard()
+        
+//        if score > highScore {
+//
+//            let defaults = UserDefaults.standard
+//
+//            defaults.set(score, forKey: scoreKey)
+//
+//            if !showingHighScore {
+//                showingHighScore = true
+        
+                scoreNode.run(SKAction.scale(to: 1.5, duration: 0.25))
+                scoreNode.fontColor = SKColor(red:0.99, green:0.92, blue:0.55, alpha:1.0)
+            //}
+        //}
     }
     
     /// Reset points.

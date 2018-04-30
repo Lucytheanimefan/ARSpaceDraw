@@ -9,6 +9,7 @@
 import UIKit
 import SceneKit
 import ARKit
+import CoreMotion
 
 class ViewController: UIViewController, ARSCNViewDelegate {
     
@@ -30,8 +31,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     let scoreNode = ScoreNode()
     
+    var motionManager:CMMotionManager!
+    
+    var deviceMotion:CMDeviceMotion!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.motionManager = CMMotionManager()
+        coreMotionUpdates()
         
         sceneView.debugOptions.insert(.showWireframe)
         
@@ -61,6 +69,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        coreMotionUpdates()
+        
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = [.horizontal, .vertical]
@@ -79,7 +89,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        self.motionManager.stopDeviceMotionUpdates()
         // Pause the view's session
         sceneView.session.pause()
     }
@@ -90,7 +100,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     
-    
+    func coreMotionUpdates(){
+        self.motionManager.startDeviceMotionUpdates(to: OperationQueue.current!) { (deviceMotion, error) in
+            guard error == nil else {
+                print(error.debugDescription)
+                return
+            }
+            self.deviceMotion = deviceMotion
+        }
+    }
     
     // MARK: touches
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -231,23 +249,53 @@ extension ViewController: ARSessionDelegate{
         
         guard self.gestureNode != nil else {return}
         
+        
         for (i, node) in nodes.enumerated(){
             let currentPosition = self.currentTransform.position()
             let nodePosition = node.position
             
+            var timer:Timer?
+            
+            func collisionCompletion(){
+                guard self.nodes.count > i else {return}
+                //self.scoreNode.addPoint()
+                self.nodes.remove(at: i)
+                timer?.invalidate()
+            }
+            
+            
+            
             // Collision detection
             if NodeManipulator.withinBounds(position1: nodePosition, position2: currentPosition){
                 print("--Within bounds!!!!")
-                NodeManipulator.handleCollision(node: node) {
-                    guard self.nodes.count > i else {return}
-                    self.scoreNode.addPoint()
-                    self.nodes.remove(at: i)
+                if deviceMotion == nil {
+                    NodeManipulator.handleCollision(node: node, completion:collisionCompletion)
                 }
+                else{
+                    let maxAcc = CGFloat(deviceMotion.userAcceleration.maxAcceleration())
+                    let timeInt = pow(maxAcc*10, 1.5)
+                    NodeManipulator.handleCollision(node: node, rotationAngle: maxAcc * 1000, rotationDuration: TimeInterval(timeInt), rotationCompletion: {
+                        self.scoreNode.addPoints(points: Float(pow(maxAcc*10,2)*100).rounded()/100)
+                    }, completion: collisionCompletion)
+
+                }
+                
             }
         }
     }
 }
 
+
+extension CMRotationRate{
+    func maxRotationRate()->Double{
+        return max(self.x, self.y, self.z)
+    }
+}
+extension CMAcceleration{
+    func maxAcceleration()->Double{
+        return max(self.x, self.y, self.z)
+    }
+}
 
 extension matrix_float4x4 {
     func position() -> SCNVector3 {

@@ -68,10 +68,15 @@ class NodeManipulator: NSObject {
     }
     
     
-    static func handleCollision(node:SCNNode, completion:@escaping ()->()){
+    static func handleCollision(node:SCNNode, rotationAngle:CGFloat=1800, rotationDuration:TimeInterval=1, rotationCompletion:(()->())? = nil, completion:@escaping ()->()){
         // Spin it around a bit
-        let rotateAction = SCNAction.rotate(by: 1800, around: node.position, duration: 1)
+        print("Rotation angle: \(rotationAngle), rotation duration: \(rotationDuration)")
+        let rotateAction = SCNAction.rotate(by: rotationAngle, around: node.position, duration: rotationDuration)
         node.runAction(rotateAction) {
+            if (rotationCompletion != nil){
+                rotationCompletion!()
+            }
+            
             // Fade it out
             let action = SCNAction.fadeOut(duration: 2)
             node.runAction(action, completionHandler: {

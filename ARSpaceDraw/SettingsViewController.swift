@@ -8,6 +8,7 @@
 
 import UIKit
 import SceneKit
+import CoreMotion
 
 class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
