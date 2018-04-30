@@ -69,14 +69,19 @@ class NodeManipulator: NSObject {
     
     
     static func handleCollision(node:SCNNode, completion:@escaping ()->()){
-        // Move the node out a bit if I collide with it
-        let action = SCNAction.fadeOut(duration: 2)
-        node.runAction(action, completionHandler: {
-            node.removeFromParentNode()
-            print("Killed a NODE!")
-            completion()
-        })
-        node.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: nil)
+        // Spin it around a bit
+        let rotateAction = SCNAction.rotate(by: 1800, around: node.position, duration: 1)
+        node.runAction(rotateAction) {
+            // Fade it out
+            let action = SCNAction.fadeOut(duration: 2)
+            node.runAction(action, completionHandler: {
+                node.removeFromParentNode()
+                print("Killed a NODE!")
+                completion()
+            })
+            // Drop it to the ground
+            node.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.dynamic, shape: nil)
+        }
     }
     
 }
