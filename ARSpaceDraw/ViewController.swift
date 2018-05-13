@@ -92,6 +92,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.motionManager.stopDeviceMotionUpdates()
         // Pause the view's session
         sceneView.session.pause()
+        
+//        nodes.forEach { (node) in
+//            node.removeFromParentNode()
+//        }
     }
     
     override func didReceiveMemoryWarning() {

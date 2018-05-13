@@ -18,6 +18,7 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     
     @IBOutlet weak var sizeSlider: UISlider!
     
+    @IBOutlet weak var photoImageView: UIImageView!
     private var _previewNode:SCNNode! = NodeManipulator.createSphere()
     var previewNode:SCNNode{
         get{
@@ -52,7 +53,25 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         loadValues()
         
     }
+    @IBAction func chooseImage(_ sender: UIButton) {
+        presentImagePicker()
+    }
     
+    func presentImagePicker(){
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            imagePicker.modalPresentationStyle = .popover
+            imagePicker.popoverPresentationController?.delegate = self
+            imagePicker.popoverPresentationController?.sourceView = view
+            view.alpha = 0.5
+            present(imagePicker, animated: true, completion: nil)
+        }
+        
+    }
     func loadValues(){
         self.sizeSlider.value = DrawSettings.shared.size
         self.nodePicker.selectRow(DrawSettings.shared.drawItem.hashValue, inComponent: 0, animated: false)
@@ -122,4 +141,34 @@ extension SettingsViewController: DrawSettingsDelegate{
     }
 }
 
+extension SettingsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+        view.alpha = 1
+    }
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+            print("Use editedImage Here")
+            updateNodeImage(image: editedImage)
+        } else if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            print("Use original image")
+            updateNodeImage(image: originalImage)
+        }
+        picker.dismiss(animated: true)
+    }
+    
+    
+    func updateNodeImage(image:UIImage){
+        self.photoImageView.image = image
+        self.previewNode.geometry?.setDiffuse(diffuse: image)
+        DrawSettings.shared.image = image
+    }
+}
 
+extension SettingsViewController: UIPopoverPresentationControllerDelegate {
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        view.alpha = 1.0
+    }
+}

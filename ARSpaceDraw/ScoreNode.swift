@@ -24,7 +24,7 @@ class ScoreNode: SKNode {
         
         scoreNode.text = "Score: \(score)"
         scoreNode.fontSize = 40
-        scoreNode.position = CGPoint(x: size.width / 2, y: size.height - 60)
+        scoreNode.position = CGPoint(x: size.width / 2, y: size.height - 80)
         scoreNode.zPosition = 1
         
         addChild(scoreNode)

@@ -27,6 +27,8 @@ class DrawSettings: NSObject {
     
     var color:UIColor! = .black
     
+    var image:UIImage?
+    
     var delegate:DrawSettingsDelegate?
     
     private var _drawItem:DrawItem = .sphere
