@@ -41,7 +41,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.motionManager = CMMotionManager()
         coreMotionUpdates()
         
-        sceneView.debugOptions.insert(.showWireframe)
+        //sceneView.debugOptions.insert(.showWireframe)
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -103,6 +103,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Release any cached data, images, etc that aren't in use.
     }
     
+    @IBAction func reset(_ sender: UIButton) {
+        self.nodes.forEach { (node) in
+            node.removeFromParentNode()
+        }
+        scoreNode.resetPoints()
+    }
     
     func coreMotionUpdates(){
         self.motionManager.startDeviceMotionUpdates(to: OperationQueue.current!) { (deviceMotion, error) in
