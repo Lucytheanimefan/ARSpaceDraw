@@ -92,10 +92,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.motionManager.stopDeviceMotionUpdates()
         // Pause the view's session
         sceneView.session.pause()
-        
-//        nodes.forEach { (node) in
-//            node.removeFromParentNode()
-//        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -104,10 +100,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func reset(_ sender: UIButton) {
+        removeAllNodes()
+        scoreNode.resetPoints()
+    }
+    
+    func removeAllNodes(){
         self.nodes.forEach { (node) in
             node.removeFromParentNode()
         }
-        scoreNode.resetPoints()
     }
     
     func coreMotionUpdates(){
@@ -264,8 +264,6 @@ extension ViewController: ARSessionDelegate{
                 self.nodes.remove(at: i)
                 timer?.invalidate()
             }
-            
-            
             
             // Collision detection
             if NodeManipulator.withinBounds(position1: nodePosition, position2: currentPosition){

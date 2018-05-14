@@ -131,7 +131,7 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
 extension SettingsViewController: ColorDelegate{
     func pickedColor(color: UIColor) {
         DrawSettings.shared.color = color
-        self.previewNode.geometry?.setDiffuse(diffuse: DrawSettings.shared.image ?? DrawSettings.shared.color)
+        self.previewNode.geometry?.setDiffuse(diffuse: (DrawSettings.shared.image ?? DrawSettings.shared.color) as Any)
     }
 }
 

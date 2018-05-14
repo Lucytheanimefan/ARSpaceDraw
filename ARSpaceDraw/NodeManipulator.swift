@@ -47,7 +47,7 @@ class NodeManipulator: NSObject {
 
     static func createSphere()->SCNNode{
         let sphere = SCNSphere(radius: DrawSettings.sphereRadius)
-        sphere.setDiffuse(diffuse: DrawSettings.shared.image ?? DrawSettings.shared.color)
+        sphere.setDiffuse(diffuse: (DrawSettings.shared.image ?? DrawSettings.shared.color) as Any)
         let node = SCNNode(geometry: sphere)
         //node.scale = SCNVector3Make(Float(DrawSettings.shared.size), Float(DrawSettings.shared.size), Float(DrawSettings.shared.size))
         return node
