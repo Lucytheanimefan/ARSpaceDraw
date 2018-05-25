@@ -8,6 +8,7 @@
 
 import UIKit
 import SpriteKit
+import AudioToolbox
 
 class ScoreNode: SKNode {
     private let scoreKey = "ARSPACEDRAW_HIGHSCORE"
@@ -56,24 +57,14 @@ class ScoreNode: SKNode {
     }
     
     @objc public func addPoints(points:Float) {
+        #if DEBUG
         print("Add point: \(score)")
+        #endif
         score += points
-        
+        vibratePhone()
         updateScoreboard()
-        
-//        if score > highScore {
-//
-//            let defaults = UserDefaults.standard
-//
-//            defaults.set(score, forKey: scoreKey)
-//
-//            if !showingHighScore {
-//                showingHighScore = true
-        
-                scoreNode.run(SKAction.scale(to: 1.5, duration: 0.25))
-                scoreNode.fontColor = SKColor(red:0.99, green:0.92, blue:0.55, alpha:1.0)
-            //}
-        //}
+        scoreNode.run(SKAction.scale(to: 1.5, duration: 0.25))
+        scoreNode.fontColor = SKColor(red:0.99, green:0.92, blue:0.55, alpha:1.0)
     }
     
     /// Reset points.
@@ -96,5 +87,9 @@ class ScoreNode: SKNode {
     /// Updates the score label to show the current score.
     private func updateScoreboard() {
         scoreNode.text = "Score: \(score)"
+    }
+    
+    private func vibratePhone(){
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
 }
